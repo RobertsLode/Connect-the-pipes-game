@@ -34,9 +34,6 @@ const pipePage = () => {
       } else if (value.includes('rotate')) {
         handleButtonClick('map');
       } else if (value === 'verify') {
-        if (data.includes('Correct')) {
-          setDone(data.split(':'));
-        }
         setDone(data.split(' ').pop());
       }
     };
@@ -46,6 +43,7 @@ const pipePage = () => {
     handleButtonClick(`new ${level}`);
     handleButtonClick('map');
     setAttemptsLeft(10);
+    setDone('');
   };
 
   useEffect(() => {
@@ -78,7 +76,6 @@ const pipePage = () => {
           onClick={() => {
             handleButtonClick('verify');
             setAttemptsLeft(attemptsLeft - 1);
-            console.log(done.split(' ').pop());
           }}
           text="Check if correct /"
           loaded={response.readyState === 1}
