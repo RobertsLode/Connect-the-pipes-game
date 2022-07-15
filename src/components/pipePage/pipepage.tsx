@@ -13,10 +13,10 @@ const response = new WebSocket('wss://hometask.eg1236.com/game-pipes/');
 const pipePage = () => {
   const [pipeMap, setPipemap] = useState<figurePropsMainArray>();
   const [selectedLevel, setSelectedLevel] = useState<number>();
-  const [done, setDone] = useState('');
+  const [verifyPipeMap, setVerifyPipeMap] = useState('');
   const [attemptsLeft, setAttemptsLeft] = useState(10);
 
-  const handleButtonClick = (value: string) => {
+  const handleResponse = (value: string) => {
     response.send(value);
 
     response.onmessage = ({ data }) => {
@@ -26,24 +26,24 @@ const pipePage = () => {
           .split('\n')
           .filter((item:string) => item !== '');
 
-        const Map = modifyMap.map((pipeArray:string) => pipeArray
+        const newMap = modifyMap.map((pipeArray:string) => pipeArray
           .split('')
           .map((pipe:string) => figures.find((item) => item.pipe === pipe)));
 
-        setPipemap(Map);
+        setPipemap(newMap);
       } else if (value.includes('rotate')) {
-        handleButtonClick('map');
+        handleResponse('map');
       } else if (value === 'verify') {
-        setDone(data.split(' ').pop());
+        setVerifyPipeMap(data.split(' ').pop());
       }
     };
   };
 
   const handleSelectLevel = (level: number | undefined) => {
-    handleButtonClick(`new ${level}`);
-    handleButtonClick('map');
+    handleResponse(`new ${level}`);
+    handleResponse('map');
     setAttemptsLeft(10);
-    setDone('');
+    setVerifyPipeMap('');
   };
 
   useEffect(() => {
@@ -57,7 +57,7 @@ const pipePage = () => {
 
       <img
         src={sewerImg}
-        alt=""
+        alt="sewer background"
         className="background"
       />
 
@@ -74,7 +74,7 @@ const pipePage = () => {
 
         <Button
           onClick={() => {
-            handleButtonClick('verify');
+            handleResponse('verify');
             setAttemptsLeft(attemptsLeft - 1);
           }}
           text="Check if correct /"
@@ -85,7 +85,7 @@ const pipePage = () => {
         <Button
           onClick={() => {
             handleSelectLevel(selectedLevel);
-            setDone('');
+            setVerifyPipeMap('');
           }}
           text="Reset"
           loaded={response.readyState === 1}
@@ -93,17 +93,17 @@ const pipePage = () => {
         />
 
         <span
-          className="pipe--game-done"
+          className="pipe--game-verifypipemap"
         >
-          {done}
+          {verifyPipeMap}
         </span>
 
       </div>
 
       <PipeField
         pipeMap={pipeMap}
-        onButtonClick={(value) => {
-          handleButtonClick(value);
+        onPipeClick={(value) => {
+          handleResponse(value);
         }}
       />
     </div>

@@ -1,4 +1,4 @@
-.pipeMap {
+.pipe--map {
     display: flex;
     flex-direction: column;
     background-color: #47d1ba;
@@ -7,12 +7,12 @@
     opacity: 0.8;
 }
 
-.pipestring {
+.pipe--y-array {
     display: flex;
     flex-direction: row;
 }
 
-.pipe--box {
+.pipe--x-array {
     display: flex;
     justify-content: center;
     align-items: center;

@@ -1,33 +1,34 @@
+import uniqueId from 'uniqid';
 import { figurePropsMainArray, figureProps } from '../data/figures';
 import './pipeField.scss';
 
 type pipeFieldProps = {
     pipeMap: figurePropsMainArray | undefined
-    onButtonClick: (value: string) => void
+    onPipeClick: (value: string) => void
 
 };
-export const PipeField = ({ pipeMap, onButtonClick }: pipeFieldProps) => (
-  <div className={pipeMap ? 'pipeMap' : ''}>
-    {pipeMap?.map((pipeString:figureProps[], pipeMapIndex:number) => (
+export const PipeField = ({ pipeMap, onPipeClick }: pipeFieldProps) => (
+  <div className={pipeMap ? 'pipe--map' : ''}>
+    {pipeMap?.map((pipeYArray:figureProps[], pipeYIndex:number) => (
       <div
-        key={Math.random()}
-        className="pipestring"
+        key={uniqueId()}
+        className="pipe--y-array"
       >
 
-        {pipeString.map((item:figureProps, pipeIndex: number) => (
+        {pipeYArray.map((pipeXArray:figureProps, pipeXIndex: number) => (
           <div
-            className="pipe--box"
+            className="pipe--x-array"
             onClick={() => {
-              onButtonClick(`rotate ${pipeIndex} ${pipeMapIndex}`);
+              onPipeClick(`rotate ${pipeXIndex} ${pipeYIndex}`);
             }}
-            key={Math.random()}
+            key={uniqueId()}
           >
 
             <img
               className="pipe"
-              style={item?.rotate ? { transform: `rotate(${item.rotate}deg)` } : {}}
-              src={item?.img}
-              alt={item?.pipe}
+              style={pipeXArray?.rotate ? { transform: `rotate(${pipeXArray.rotate}deg)` } : {}}
+              src={pipeXArray?.img}
+              alt={pipeXArray?.pipe}
             />
 
           </div>

@@ -14,8 +14,10 @@
     "node-sass": "^7.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-id-generator": "^3.0.2",
     "react-scripts": "^5.0.1",
     "typescript": "^4.4.3",
+    "uniqid": "^5.4.0",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
@@ -39,6 +41,7 @@
     ]
   },
   "devDependencies": {
+    "@types/uniqid": "^5.3.2",
     "@typescript-eslint/eslint-plugin": "^4.31.2",
     "@typescript-eslint/parser": "^4.31.2",
     "eslint": "^7.32.0",
