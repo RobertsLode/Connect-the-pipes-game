@@ -2,7 +2,8 @@ import '../../styles/reset.scss';
 import './pipepage.scss';
 import { useEffect, useState } from 'react';
 import levels from '../data/levels';
-import figures, { figurePropsMainArray } from '../data/figures';
+import figures from '../data/figures';
+import { FigurePropsMainArray } from '../models/models';
 import Button from '../button/button';
 import Select from '../select/select';
 import PipeField from '../pipeField/pipeField';
@@ -11,10 +12,11 @@ import sewerImg from '../images/sewer.jpg';
 const response = new WebSocket('wss://hometask.eg1236.com/game-pipes/');
 
 const pipePage = () => {
-  const [pipeMap, setPipemap] = useState<figurePropsMainArray>();
+  const [pipeMap, setPipemap] = useState<FigurePropsMainArray>();
   const [selectedLevel, setSelectedLevel] = useState<number>();
-  const [verifyPipeMap, setVerifyPipeMap] = useState('');
+  const [verifyPipeMap, setVerifyPipeMap] = useState<string | undefined>('');
   const [attemptsLeft, setAttemptsLeft] = useState(10);
+  const isReady = response.readyState === 1;
 
   const handleResponse = (value: string) => {
     response.send(value);
@@ -26,15 +28,16 @@ const pipePage = () => {
           .split('\n')
           .filter((item:string) => item !== '');
 
-        const newMap = modifyMap.map((pipeArray:string) => pipeArray
+        const newMap: FigurePropsMainArray = modifyMap.map((pipeArray:string) => pipeArray
           .split('')
           .map((pipe:string) => figures.find((item) => item.pipe === pipe)));
 
         setPipemap(newMap);
       } else if (value.includes('rotate')) {
         handleResponse('map');
-      } else if (value === 'verify') {
-        setVerifyPipeMap(data.split(' ').pop());
+      } else if (value === 'verify' && data) {
+        const verifyResponse = data.split(' ').pop();
+        setVerifyPipeMap(verifyResponse);
       }
     };
   };
@@ -47,61 +50,52 @@ const pipePage = () => {
   };
 
   useEffect(() => {
-    if (response.readyState === 1) {
+    if (isReady) {
       handleSelectLevel(selectedLevel);
     }
   }, [selectedLevel]);
 
   return (
     <div className="pipe--game-main">
-
       <img
         src={sewerImg}
         alt="sewer background"
-        className="background"
+        className="general--background"
       />
-
       <div className="pipe--game-select-and-button">
-
         <Select
           selectedLevel={selectedLevel}
           text="Select level"
           levels={levels}
-          onSelectLevel={(value) => {
-            setSelectedLevel(value);
-          }}
+          onSelectLevel={setSelectedLevel}
         />
-
         <Button
           onClick={() => {
             handleResponse('verify');
             setAttemptsLeft(attemptsLeft - 1);
           }}
           text="Check if correct /"
-          loaded={response.readyState === 1}
+          loaded={isReady}
           triesLeft={attemptsLeft}
         />
-
         <Button
           onClick={() => {
             handleSelectLevel(selectedLevel);
             setVerifyPipeMap('');
           }}
           text="Reset"
-          loaded={response.readyState === 1}
+          loaded={isReady}
           triesLeft=""
         />
-
         <span
           className="pipe--game-verifypipemap"
         >
           {verifyPipeMap}
         </span>
-
       </div>
-
       <PipeField
-        pipeMap={pipeMap}
+        pipeMap={pipeMap || []}
+        selectedLevel={selectedLevel}
         onPipeClick={(value) => {
           handleResponse(value);
         }}

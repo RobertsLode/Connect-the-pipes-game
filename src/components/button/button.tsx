@@ -1,17 +1,18 @@
-type buttonProps = {
+type ButtonProps = {
     text: string
     onClick: () => void
     loaded: boolean
     triesLeft: number | string
 };
+
 const Button = ({
-  text, onClick, loaded, triesLeft,
-}: buttonProps) => (
+  text, loaded, triesLeft, onClick,
+}: ButtonProps) => (
   <button
-    className={triesLeft === 0 || !loaded ? 'btn btn-secondary' : 'btn btn-warning'}
-    onClick={() => {
-      onClick();
-    }}
+    className={
+      triesLeft === 0 || !loaded ? 'btn btn-secondary' : 'btn btn-warning'
+} // dry, saīsināt
+    onClick={onClick}
     disabled={triesLeft === 0 || !loaded}
   >
     {`${text}  ${triesLeft}`}

@@ -4,25 +4,6 @@ import L from '../images/LLL.png';
 import T from '../images/TT.png';
 import X from '../images/XX.png';
 
-export type figurePropsMainArray = [
-  {
-  directions: number[]
-    pipe: string
-    compatable: number[]
-    connected: boolean
-    img: string
-    rotate: number
-}[]
-]
-export type figureProps = {
-  directions: number[]
-    pipe: string
-    compatable: number[]
-    connected: boolean
-    img: string
-    rotate: number
-}
-
 const figures = [
   {
     directions: [1, 0, 0, 0],
@@ -146,10 +127,11 @@ const figures = [
   },
   {
     directions: [0, 0, 0, 0],
-    pipe: '',
+    pipe: 'none',
     compatable: [0, 0, 0, 0],
     connected: false,
-
+    img: 'none',
+    rotate: 0,
   },
 ];
 
